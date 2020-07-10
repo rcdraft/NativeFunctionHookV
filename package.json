@@ -1,6 +1,6 @@
 {
   "name": "NativeFunctionHookV",
-  "version": "0.2.1.0",
+  "version": "0.2.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -8,5 +8,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "LGPL-3.0-or-later"
+  "license": "LGPL-3.0-or-later",
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
 }
