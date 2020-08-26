@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -41,11 +43,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\NModel.cs" />
+    <Compile Include="Enums\Achievement.cs" />
+    <Compile Include="Enums\EnterVehicleFlags.cs" />
+    <Compile Include="Entities\NSpotlight.cs" />
+    <Compile Include="Entities\NTaskInvoker.cs" />
+    <Compile Include="Enums\EntityType.cs" />
     <Compile Include="Enums\PedAwareness.cs" />
     <Compile Include="Enums\VehicleSeat.cs" />
     <Compile Include="Enums\VehicleWindow.cs" />
     <Compile Include="Helpers\Safety.cs" />
+    <Compile Include="Interfaces\IDeletable.cs" />
+    <Compile Include="Interfaces\IHandleable.cs" />
+    <Compile Include="Interfaces\ISpatial.cs" />
     <Compile Include="InvalidHandleableException.cs" />
+    <Compile Include="Native\NativeHashes.cs" />
+    <Compile Include="NEntity.cs" />
+    <Compile Include="Network\NetworkGame.cs" />
+    <Compile Include="Network\Sessions.cs" />
     <Compile Include="NGame.cs" />
     <Compile Include="NPed.cs" />
     <Compile Include="NPlayer.cs" />
@@ -54,12 +69,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="ScriptHookVDotNet2">
-      <Version>2.10.13</Version>
+    <PackageReference Include="ScriptHookVDotNet3">
+      <Version>3.0.4</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

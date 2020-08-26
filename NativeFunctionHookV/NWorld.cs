@@ -1,4 +1,5 @@
 ﻿using GTA;
+using GTA.Math;
 using GTA.Native;
 using System;
 using System.Collections.Generic;
@@ -43,5 +44,15 @@ namespace NativeFunctionHookV
             PrepareAlarm(name);
             Function.Call(Hash.START_ALARM, name, p1);
         }
+
+        public static Vector3 GetNextPositionOnStreet(Vector3 position)
+        {
+            OutputArgument output = new OutputArgument();
+            bool success = Function.Call<bool>(Hash.GET_NTH_CLOSEST_VEHICLE_NODE, position.X, position.Y, position.Z, output, 1, 0x40400000, 0);
+            if (!success) throw new Exception("Did not found any vehicle node.");
+            return output.GetResult<Vector3>();
+        }
+
+
     }
 }

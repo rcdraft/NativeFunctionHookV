@@ -97,10 +97,19 @@ namespace NativeFunctionHookV
             {
                 CheckForExists();
                 if (!GPed.IsDead) throw new InvalidOperationException("This ped is not died yet.");
-                int time = Function.Call<int>(Hash._GET_PED_TIME_OF_DEATH, GPed);
+                int time = Function.Call<int>(Hash.GET_PED_TIME_OF_DEATH, GPed);
                 int ticksSinceDeath = Game.GameTime - time;
                 TimeSpan result = TimeSpan.FromMilliseconds(ticksSinceDeath);
                 return result;
+            }
+        }
+
+        public bool IsPlayer
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_A_PLAYER, Handle);
             }
         }
 
@@ -189,12 +198,219 @@ namespace NativeFunctionHookV
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is stopped.
+        /// </summary>
+        public bool IsStopped
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_STOPPED, Handle);
+            }
+        }
+
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is sitting in any vehicle.
+        /// </summary>
+        public bool IsInAnyVehicle
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_IN_ANY_VEHICLE, Handle);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is sitting in a police vehicle.
+        /// </summary>
+        public bool IsInAnyPoliceVehicle
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_IN_ANY_POLICE_VEHICLE, Handle);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is sitting in any boat.
+        /// </summary>
+        public bool IsInAnyBoat
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_IN_ANY_BOAT, Handle);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is sitting in any submarine.
+        /// </summary>
+        public bool IsInAnySubmarine
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_IN_ANY_SUB, Handle);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is sitting in any helicopter.
+        /// </summary>
+        public bool IsInAnyHelicopter
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_IN_ANY_HELI, Handle);
+            }
+        }
+
+        public bool IsInAnyPlane
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_IN_ANY_PLANE, Handle);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is sitting on a bike.
+        /// </summary>
+        public bool IsOnAnyBike
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_ON_ANY_BIKE, Handle);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating current armor that this instance has.
+        /// </summary>
+        public int Armor
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<int>(Hash.GET_PED_ARMOUR, Handle);
+            }
+            set
+            {
+                CheckForExists();
+                Function.Call(Hash.SET_PED_ARMOUR, Handle, value);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is humanoid.
+        /// </summary>
+        public bool IsHuman
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_HUMAN, Handle);
+            }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance <strong>on</strong> top of any vehicle.
+        /// </summary>
+        /// <remarks>
+        /// Original native name is IS_PED_<strong>ON</strong>_VEHICLE.
+        /// </remarks>
+        public bool IsOnTopOfAnyVehicle
+        {
+            get
+            {
+                CheckForExists();
+                return Function.Call<bool>(Hash.IS_PED_ON_VEHICLE, Handle);
+            }
+        }
+
+        /// <summary>
+        /// Gets the last vehicle entered of this instance.
+        /// </summary>
+        public NVehicle LastVehicle
+        {
+            get
+            {
+                CheckForExists();
+                Vehicle v = Function.Call<Vehicle>(Hash.GET_VEHICLE_PED_IS_IN, Handle, true);
+                if (v != null || v.Exists()) return new NVehicle(v);
+                else return null;
+            }
+        }
+
+        /// <summary>
+        /// Gets the current vehicle of this instance.
+        /// </summary>
+        public NVehicle CurrentVehicle
+        {
+            get
+            {
+                CheckForExists();
+                Vehicle v = Function.Call<Vehicle>(Hash.GET_VEHICLE_PED_IS_IN, Handle, false);
+                if (v != null || v.Exists()) return new NVehicle(v);
+                else return null;
+            }
+        }
+
+        /// <summary>
+        /// Increases <see cref="Armor"/> amount that this instance has.
+        /// </summary>
+        /// <param name="increase">The value to increase.</param>
+        public void IncreaseArmor(int increase)
+        {
+            CheckForExists();
+            Function.Call(Hash.ADD_ARMOUR_TO_PED, Handle, increase);
+        }
+
+        /// <summary>
+        /// Determines whether this instance is in specified vehicle.
+        /// </summary>
+        /// <param name="vehicle">The vehicle to check.</param>
+        /// <returns>Whether this instance is in that vehicle.</returns>
+        public bool IsInVehicle(NVehicle vehicle)
+        {
+            CheckForExists();
+            if(vehicle == null)
+            {
+                throw new ArgumentNullException(nameof(vehicle));
+            }
+            if (!vehicle.IsValid()) throw new ArgumentException("Specified vehicle does not exists.", new InvalidHandleableException(vehicle));
+            return Function.Call<bool>(Hash.IS_PED_IN_VEHICLE, Handle, vehicle);
+        }
+
+        /// <summary>
+        /// Determines whether this instance is on top of specified vehicle.
+        /// </summary>
+        /// <param name="vehicle">The vehicle to check.</param>
+        /// <returns>Whether this instance is on top of that vehicle.</returns>
+        public bool IsOnTopOfVehicle(NVehicle vehicle)
+        {
+            CheckForExists();
+            if (vehicle == null)
+            {
+                throw new ArgumentNullException(nameof(vehicle));
+            }
+            if (!vehicle.IsValid()) throw new ArgumentException("Specified vehicle does not exists.", new InvalidHandleableException(vehicle));
+            return Function.Call<bool>(Hash.IS_PED_ON_VEHICLE, Handle, vehicle);
+        }
 
         #region Shortcuts to GTA Ped
         /// <summary>
         /// Tasks of a ped. Task represents actions that a ped will preform. If you want preform tasks in sequence, check out <see cref="TaskSequence"/>.
         /// </summary>
-        public Tasks Tasks => GPed.Task;
+        public TaskInvoker Tasks => GPed.Task;
     }
 }
 #endregion

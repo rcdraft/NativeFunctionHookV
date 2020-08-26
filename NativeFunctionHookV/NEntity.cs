@@ -1,13 +1,20 @@
 ﻿using GTA;
+using IHandleable = NativeFunctionHookV.Interfaces.IHandleable;
 using GTA.Math;
 using GTA.Native;
 using NativeFunctionHookV.Enums;
 using NativeFunctionHookV.Helpers;
 using System;
+using EntityType = NativeFunctionHookV.Enums.EntityType;
+using IDeletable = NativeFunctionHookV.Interfaces.IDeletable;
+using ISpatial = NativeFunctionHookV.Interfaces.ISpatial;
 
 namespace NativeFunctionHookV
 {
-    public abstract class NEntity
+    /// <summary>
+    /// Represents an entity. Entity represents all active objects, such as peds, vehicles, props, buildings, etc.
+    /// </summary>
+    public abstract class NEntity : IHandleable, IDeletable, ISpatial
     {
         #region Basic Implementations
         public Entity GEntity { get; private set; }
@@ -252,20 +259,23 @@ namespace NativeFunctionHookV
             }
         }
 
-        public int Heading
+        public float Heading
         {
             get
             {
                 CheckForExistsInternal();
-                return Function.Call<int>(Hash.GET_ENTITY_HEADING, Handle);
+                return Function.Call<float>(Hash.GET_ENTITY_HEADING, Handle);
             }
             set
             {
                 CheckForExistsInternal();
-                Function.Call(Hash.SET_ENTITY_HEADING, Handle);
+                Function.Call(Hash.SET_ENTITY_HEADING, Handle, value);
             }
         }
 
+        /// <summary>
+        /// Gets a value indicating the height of this instance above the ground level.
+        /// </summary>
         public float HeightAboveGround
         {
             get
@@ -297,6 +307,56 @@ namespace NativeFunctionHookV
             set => Alpha = value;
         }
 
+        public bool HasBeenDamagedByAnyPed
+        {
+            get
+            {
+                CheckForExistsInternal();
+                return Function.Call<bool>(Hash.HAS_ENTITY_BEEN_DAMAGED_BY_ANY_PED, Handle);
+            }
+        }
+
+        public bool HasBeenDamagedByAnyObject
+        {
+            get
+            {
+                CheckForExistsInternal();
+                return Function.Call<bool>(Hash.HAS_ENTITY_BEEN_DAMAGED_BY_ANY_OBJECT, Handle);
+            }
+        }
+
+        public bool HasBeenDamagedByAnyVehicle
+        {
+            get
+            {
+                CheckForExistsInternal();
+                return Function.Call<bool>(Hash.HAS_ENTITY_BEEN_DAMAGED_BY_ANY_VEHICLE, Handle);
+            }
+        }
+
+        public Quaternion Quaternion
+        {
+            get
+            {
+                CheckForExistsInternal();
+                float x;
+                float y;
+                float z;
+                float w;
+
+                unsafe
+                {
+                    Function.Call(Hash.GET_ENTITY_QUATERNION, Handle, &x, &y, &z, &w);
+                }
+
+                return new Quaternion(x, y, z, w);
+            }
+            set
+            {
+                CheckForExistsInternal();
+                Function.Call(Hash.SET_ENTITY_QUATERNION, Handle, value.X, value.Y, value.Z, value.W);
+            }
+        }
 
         #endregion
         #region Methods
@@ -341,6 +401,16 @@ namespace NativeFunctionHookV
         {
             CheckForExistsInternal();
             Function.Call(Hash.RESET_ENTITY_ALPHA, Handle);
+        }
+
+        /// <summary>
+        /// Update lights of this instance.
+        /// </summary>
+        [Obsolete("The native equlivant to this methods not exists in SHVDN Hashes.", true)]
+        public void UpdateLight()
+        {
+            CheckForExistsInternal();
+            
         }
 
         #endregion
