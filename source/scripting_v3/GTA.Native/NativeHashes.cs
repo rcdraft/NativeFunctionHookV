@@ -1,7 +1,9 @@
-﻿// This file was generated with https://github.com/JohnnyCrazy/scripthookvdotnet-nativegen
+// This file was generated with https://github.com/JohnnyCrazy/scripthookvdotnet-nativegen
 
-namespace NativeFunctionHookV.Native
+namespace GTA
 {
+	namespace Native
+	{
 		public enum Hash : ulong
 		{
 			/*
@@ -4603,3 +4605,4 @@ namespace NativeFunctionHookV.Native
 
 		}
 	}
+}

@@ -57,7 +57,7 @@
     <Compile Include="Interfaces\IHandleable.cs" />
     <Compile Include="Interfaces\ISpatial.cs" />
     <Compile Include="InvalidHandleableException.cs" />
-    <Compile Include="Native\NativeHashes.cs" />
+    <Compile Include="Native\DLC.cs" />
     <Compile Include="NEntity.cs" />
     <Compile Include="Network\NetworkGame.cs" />
     <Compile Include="Network\Sessions.cs" />
